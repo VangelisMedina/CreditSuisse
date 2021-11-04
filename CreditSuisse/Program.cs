@@ -12,26 +12,23 @@ namespace CreditSuisse
             uint numberTrades = 0;
             List<Trade> trades = new List<Trade>();
             bool validation = false;
-            
-            while(validation == false)
+
+            while (validation == false)
             {
-                Console.WriteLine("Reference date (mm/dd/yyyy):");
-                var referenceDateInput = Console.ReadLine();
-                DateTime aux;
-                if (DateTime.TryParse(referenceDateInput, new CultureInfo("en-US"), DateTimeStyles.None, out aux))
-                {
+                string referenceDateInput = ConsoleHelper.GetInput(Menssage.ReferenceDate);
+                referenceDate = TradeConsoleValidator.ReferenceDateValidation(referenceDateInput);
+
+                if (referenceDate != null)
                     validation = true;
-                    referenceDate = aux;
-                }
                 else
-                    Console.WriteLine("Invalid date.");               
+                    Console.WriteLine(Menssage.ReferenceDateError);
             }
 
             validation = false;
             while (validation == false)
             {
                 Console.WriteLine("Number of trades:");
-                var numberTradesInput = Console.ReadLine();               
+                var numberTradesInput = Console.ReadLine();
 
                 if (UInt32.TryParse(numberTradesInput, out numberTrades) && numberTrades > 0)
                     validation = true;
@@ -48,13 +45,13 @@ namespace CreditSuisse
                     var tradesInput = Console.ReadLine();
 
                     var tradesInputArray = tradesInput.Split(' ');
-                    if(tradesInputArray.Length != 3)
-                        Console.WriteLine(i + " Invalid trade format.");                   
+                    if (tradesInputArray.Length != 3)
+                        Console.WriteLine(i + " Invalid trade format.");
                     else
                     {
                         Double value;
                         bool valueValid = Double.TryParse(tradesInputArray[0], out value);
-                        if(valueValid == false)
+                        if (valueValid == false)
                             Console.WriteLine(i + " Invalid value.");
 
                         String clientSector = tradesInputArray[1];
@@ -81,7 +78,8 @@ namespace CreditSuisse
                 Console.WriteLine(trade.GetCategory(referenceDate.Value));
             }
 
-           
+
         }
+
     }
 }
